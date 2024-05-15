@@ -12,15 +12,6 @@
       />
       <p>{{ post.text || 'Contenido no disponible' }}</p>
       <small>{{ post.authorName || 'Autor desconocido' }}</small>
-      <ul>
-        <li v-if="post.socialLinks.linkedin">
-          <a :href="post.socialLinks.linkedin" target="_blank">LinkedIn</a>
-        </li>
-        <li v-if="post.socialLinks.instagram">
-          <a :href="post.socialLinks.instagram" target="_blank">Instagram</a>
-        </li>
-        <!-- Agrega aquí otros enlaces sociales según sea necesario -->
-      </ul>
       <small>{{ formatDate(post.date) }}</small>
     </div>
   </div>
@@ -45,7 +36,7 @@ function formatDate(dateString) {
 
 // Función para establecer una imagen predeterminada en caso de error
 function setDefaultImage(event) {
-  event.target.src = '/path/to/default/image.jpg' // Reemplaza esto con la ruta real a tu imagen predeterminada
+  event.target.src = '/favicon.ico' // Reemplaza esto con la ruta real a tu imagen predeterminada
 }
 </script>
 
