@@ -1,27 +1,39 @@
 <template>
   <div class="post-detail-view">
     <h1>Detalles del Post</h1>
-    <PostDetail v-if="postId" :postId="postId" />
+    <PostDetail v-if="post" :post="post" />
     <p v-else>No se encontró el post.</p>
   </div>
 </template>
 
 <script setup>
-import PostDetail from './components/PostDetail.vue' // Ajusta la ruta según la ubicación real de tu componente
+import PostDetail from '../components/PostDetail.vue' // Asegúrate de que la ruta sea correcta
 import { useRouter } from 'vue-router'
-import { watchEffect, ref } from 'vue'
+import { ref, watchEffect } from 'vue'
 
-// Obtener el ID del post desde la URL
 const router = useRouter()
-const postId = ref(null)
+const postId = ref(router.currentRoute.value.params.id)
 
-// Observa los cambios en la ruta y actualiza postId en consecuencia
 watchEffect(() => {
-  const id = router.currentRoute.value.params.id
-  if (id) {
-    postId.value = id
+  postId.value = router.currentRoute.value.params.id
+})
+
+const post = ref(null)
+
+watchEffect(() => {
+  if (postId.value) {
+    // Simula la obtención del post por ID, reemplaza esto con tu lógica real
+    post.value = {
+      id: postId.value,
+      title: 'Titulo del post',
+      subtitle: 'Subtitulo del post',
+      image: 'url-de-la-imagen',
+      text: 'Texto del post',
+      authorName: 'Nombre del autor',
+      date: '2023-04-01'
+    }
   } else {
-    postId.value = null
+    post.value = null
   }
 })
 </script>

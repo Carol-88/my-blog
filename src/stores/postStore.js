@@ -5,6 +5,7 @@ export const usePostStore = defineStore({
   id: 'post',
   state: () => ({
     posts: [],
+    activePost: null,
     post: {
       title: '',
       subtitle: '',
@@ -54,6 +55,23 @@ export const usePostStore = defineStore({
     updateAuthorName(author_name) {
       this.post.author_name = author_name
     },
+    async loadPostById(id) {
+      try {
+        let { data: posts } = await supabase.from('posts').select('id')
+
+        const post = posts.find((p) => p.id === id)
+
+        if (post) {
+          this.activePost = post
+        } else {
+          console.log('Post not found')
+        }
+      } catch (error) {
+        console.error('Error al cargar el post por ID:', error)
+        throw error
+      }
+    },
+
     async createPost() {
       try {
         const { data, error } = await supabase.from('posts').insert([this.post])
@@ -62,7 +80,7 @@ export const usePostStore = defineStore({
           throw error
         }
         if (data) {
-          this.fetchPostList() // Refrescar la lista de posts después de crear uno
+          this.fetchPostList()
           this.errorMessage = ''
         }
       } catch (error) {

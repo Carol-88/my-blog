@@ -3,40 +3,34 @@
     <div v-if="activePost" class="loading-state">
       <p>Cargando...</p>
     </div>
-    <div v-else class="post-content">
+    <div v-else-if="activePost && activePost.title" class="post-content">
       <h2>{{ activePost.title }}</h2>
       <p>{{ activePost.subtitle }}</p>
       <img v-if="activePost.image" :src="activePost.image" alt="Imagen del post" />
       <p>{{ activePost.text }}</p>
       <small>{{ activePost.authorName }}</small>
-      <ul>
-        <li><a :href="activePost.socialLinks.linkedin" target="_blank">LinkedIn</a></li>
-        <li><a :href="activePost.socialLinks.instagram" target="_blank">Instagram</a></li>
-        <!-- Agrega aquí otros enlaces sociales según sea necesario -->
-      </ul>
-      <small>{{ formatDate(activePost.date) }}</small>
+      <small class="small-text">{{ formatDate(activePost.date) }}</small>
     </div>
   </div>
 </template>
 
 <script setup>
 import { usePostStore } from '../stores/postStore.js'
-import { computed, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { ref, watchEffect } from 'vue'
 
 const postStore = usePostStore()
-const postId = ref(null)
+const router = useRouter()
+
+// Utilizar ref para almacenar el post activo
 const activePost = ref(null)
 
-const posts = computed(() => postStore.posts)
-
-onMounted(async () => {
-  const post = posts.value.find((p) => p.id === postId.value)
-  if (post) {
+// Actualizar el post activo cuando cambia la ruta
+watchEffect(() => {
+  const postId = router.currentRoute.value.params.id
+  postStore.loadPostById(postId).then((post) => {
     activePost.value = post
-  } else {
-    // Manejar el caso en que el post no se encuentra
-    console.log('Post no encontrado')
-  }
+  })
 })
 
 function formatDate(dateString) {
@@ -46,20 +40,74 @@ function formatDate(dateString) {
 </script>
 
 <style scoped>
-/* Estilos para los detalles del post */
 .post-detail {
-  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
-.message {
-  text-align: center;
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 18px;
 }
 
 .post-content {
-  border: 1px solid #ccc;
-  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 24px;
   margin-top: 20px;
 }
 
-/* Estilos adicionales según sea necesario */
+.post-content h2 {
+  margin-bottom: 16px;
+  color: #333;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+.post-content p {
+  margin-bottom: 12px;
+  line-height: 1.6;
+  color: #666;
+}
+
+.post-content img {
+  width: 100%;
+  height: auto;
+  margin-bottom: 16px;
+}
+
+.post-content small {
+  display: block;
+  margin-top: 16px;
+  color: #999;
+}
+
+.post-content ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 16px;
+}
+
+.post-content ul li {
+  margin-bottom: 8px;
+}
+
+.post-content ul li a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.post-content ul li a:hover {
+  text-decoration: underline;
+}
+
+.small-text {
+  font-size: 14px;
+  color: #777;
+}
 </style>

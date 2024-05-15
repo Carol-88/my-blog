@@ -1,15 +1,14 @@
 <template>
   <div class="post-list">
-    <!-- Iterar sobre los posts -->
-    <div v-for="(post, index) in posts" :key="index" class="post-item">
+    <div
+      v-for="(post, index) in posts"
+      :key="index"
+      class="post-item"
+      @click="navigateToPostDetail(post)"
+    >
       <h3>{{ post.title || 'Título no disponible' }}</h3>
       <p>{{ post.subtitle || 'Subtítulo no disponible' }}</p>
-      <img
-        v-if="post.image"
-        :src="post.image"
-        @error="setDefaultImage($event)"
-        alt="Imagen del post"
-      />
+      <img v-if="post.image" :src="post.image" alt="Imagen del post" />
       <p>{{ post.text || 'Contenido no disponible' }}</p>
       <small>{{ post.authorName || 'Autor desconocido' }}</small>
       <small>{{ formatDate(post.date) }}</small>
@@ -20,37 +19,62 @@
 <script setup>
 import { usePostStore } from '../stores/postStore'
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 
-// Acceso a la tienda
 const postStore = usePostStore()
-
-// Obtener los posts de la tienda
+const router = useRouter()
 const posts = computed(() => postStore.posts)
 
-// Función para formatear la fecha
 function formatDate(dateString) {
   if (!dateString) return 'Fecha no disponible'
   const options = { year: 'numeric', month: 'long', day: 'numeric' }
   return new Date(dateString).toLocaleDateString(undefined, options)
 }
 
-// Función para establecer una imagen predeterminada en caso de error
-function setDefaultImage(event) {
-  event.target.src = '/favicon.ico' // Reemplaza esto con la ruta real a tu imagen predeterminada
+function navigateToPostDetail(post) {
+  router.push({ name: 'postdetail', params: { id: post.id } })
 }
 </script>
 
 <style scoped>
-/* Estilos para la lista de posts */
 .post-list {
   padding: 20px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .post-item {
   border-bottom: 1px solid #ccc;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
+  padding: 10px;
+  margin: 10px;
+  width: 50%;
+  height: 500px;
+  box-sizing: border-box;
+  box-shadow:
+    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
 
-/* Estilos adicionales según sea necesario */
+.post-item img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 5px;
+  box-shadow:
+    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+.post-item small {
+  color: #777;
+  display: block;
+  margin-top: 5px;
+}
+
+@media (max-width: 768px) {
+  .post-item {
+    width: calc(100% - 20px);
+  }
+}
 </style>
