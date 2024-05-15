@@ -22,9 +22,7 @@
           placeholder="Contraseña"
           :class="{ 'is-invalid': passwordError }"
         />
-        <span v-if="passwordError" class="error-message">{{
-          passwordError
-        }}</span>
+        <span v-if="passwordError" class="error-message">{{ passwordError }}</span>
       </div>
       <div class="form-group">
         <label for="confirmPassword">Confirmar contraseña</label>
@@ -35,62 +33,57 @@
           placeholder="Confirmar contraseña"
           :class="{ 'is-invalid': confirmPasswordError }"
         />
-        <span v-if="confirmPasswordError" class="error-message">{{
-          confirmPasswordError
-        }}</span>
+        <span v-if="confirmPasswordError" class="error-message">{{ confirmPasswordError }}</span>
       </div>
-      <button type="submit" :disabled="isValid">Registrarse</button>
+      <button type="submit">Registrarse</button>
     </form>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
-import { useUserStore } from "../stores/user.js";
+import { ref, computed } from 'vue'
+import { useUserStore } from '../stores/user.js'
 
-const userStore = useUserStore();
-const email = ref("");
-const password = ref("");
-const confirmPassword = ref("");
+const userStore = useUserStore()
+const email = ref('')
+const password = ref('')
+const confirmPassword = ref('')
 
 const emailError = computed(() => {
-  if (!email.value) return "El correo electrónico es requerido.";
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email.value))
-    return "El correo electrónico no es válido.";
-  return null;
-});
+  if (!email.value) return 'El correo electrónico es requerido.'
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!emailRegex.test(email.value)) return 'El correo electrónico no es válido.'
+  return null
+})
 
 const passwordError = computed(() => {
-  if (!password.value) return "La contraseña es requerida.";
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+  if (!password.value) return 'La contraseña es requerida.'
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
   if (!passwordRegex.test(password.value))
-    return "La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y tener al menos 8 caracteres.";
-  return null;
-});
+    return 'La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y tener al menos 8 caracteres.'
+  return null
+})
 
 const confirmPasswordError = computed(() => {
-  if (!confirmPassword.value)
-    return "La confirmación de contraseña es requerida.";
-  if (password.value !== confirmPassword.value)
-    return "Las contraseñas no coinciden.";
-  return null;
-});
+  if (!confirmPassword.value) return 'La confirmación de contraseña es requerida.'
+  if (password.value !== confirmPassword.value) return 'Las contraseñas no coinciden.'
+  return null
+})
 
-const isValid = computed(() => {
-  return (
-    !emailError.value && !passwordError.value && !confirmPasswordError.value
-  );
-});
+// const isValid = computed(() => {
+//   return (
+//     !emailError.value && !passwordError.value && !confirmPasswordError.value
+//   );
+// });
 
 const handleSubmit = async () => {
-  if (!isValid.value) return;
+  // if (!isValid.value) return;
   try {
-    await userStore.signUp(email.value, password.value);
+    await userStore.signUp(email.value, password.value)
   } catch (error) {
-    alert.error("Error al registrarse:", error.message);
+    alert.error('Error al registrarse:', error.message)
   }
-};
+}
 </script>
 
 <style scoped>

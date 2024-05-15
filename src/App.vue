@@ -2,23 +2,22 @@
 import { useUserStore } from './stores/user.js'
 import { usePostStore } from './stores/postStore.js'
 import { useRouter } from 'vue-router'
-import { storeToRefs } from 'pinia'
 import { onMounted } from 'vue'
 
 const router = useRouter()
 const userStore = useUserStore()
 const postStore = usePostStore()
-const { user } = storeToRefs(userStore)
 
 onMounted(async () => {
   try {
     await userStore.fetchUser()
-    if (!user.value) {
-      router.push({ path: '/auth' })
+    if (!userStore.user) {
+      // Asegúrate de acceder al usuario a través de la tienda
+      router.push({ name: 'auth' }) // Usa nombres de rutas para mayor claridad
     } else {
-      router.push({ path: '/' })
+      router.push({ name: 'home' }) // Asume que tienes una ruta llamada 'Home'
       await postStore.fetchPostList()
-      await userStore.fetchProfile()
+      // await userStore.fetchProfile()
     }
   } catch (e) {
     console.error(e)

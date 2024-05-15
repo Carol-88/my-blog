@@ -7,9 +7,9 @@
       <textarea v-model="post.text" placeholder="Texto del post" required></textarea>
       <input v-model="post.authorName" placeholder="Nombre del autor" required />
       <div class="social-links">
-        <a :href="post.socialLinks.facebook" target="_blank">Facebook</a>
-        <a :href="post.socialLinks.twitter" target="_blank">Twitter</a>
+        <a :href="post.socialLinks.linkedin" target="_blank">LinkedIn</a>
         <a :href="post.socialLinks.instagram" target="_blank">Instagram</a>
+        <!-- Asegúrate de que los enlaces sociales estén correctamente configurados -->
       </div>
       <input type="date" v-model="post.date" required />
       <button type="submit">Publicar</button>
@@ -19,17 +19,24 @@
 
 <script setup>
 import { usePostStore } from '../stores/postStore'
+import { toRefs } from 'vue'
 
+// Acceso a la tienda
 const postStore = usePostStore()
-const post = postStore.state.post
+
+// Convertir el estado de la tienda en referencias reactivas individuales
+const { post } = toRefs(postStore)
 
 const handleSubmit = () => {
   console.log('Post submitted:', post.value)
 }
 
 const handleImageUpload = (event) => {
-  post.value.image = event.target.files[0]
+  // Asumiendo que tienes una acción updateImage en tu tienda
+  postStore.updateImage(event.target.files[0])
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+/* Estilos para el formulario */
+</style>

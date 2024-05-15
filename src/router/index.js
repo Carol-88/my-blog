@@ -12,22 +12,22 @@ const router = createRouter({
       path: '/auth',
       name: 'auth',
       component: () => import('../views/AuthView.vue')
-    },
-    {
-      path: '/profile',
-      name: 'profile',
-      component: () => import('../views/ProfileView.vue')
-    },
-    {
-      path: '/createpost',
-      name: 'createpost',
-      component: () => import('../components/CreatePostForm.vue')
-    },
-    {
-      path: '/postdetail/:id',
-      name: 'postdetail',
-      component: () => import('../components/PostDetailView.vue')
     }
+    // {
+    //   path: '/profile',
+    //   name: 'profile',
+    //   component: () => import('../views/ProfileView.vue')
+    // },
+    // {
+    //   path: '/createpost',
+    //   name: 'createpost',
+    //   component: () => import('../components/CreatePostForm.vue')
+    // },
+    // {
+    //   path: '/postdetail/:id',
+    //   name: 'postdetail',
+    //   component: () => import('../components/PostDetailView.vue')
+    // }
   ]
 })
 
