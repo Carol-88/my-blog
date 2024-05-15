@@ -4,41 +4,40 @@
     <div class="container">
       <h2>Editar perfil</h2>
       <form @submit.prevent="updateProfile">
-        <input v-model="full_name" placeholder="Nombre completo" />
-        <input v-model="avatar_url" placeholder="URL del avatar" />
-        <input v-model="username" placeholder="Nombre de usuario" />
+        <input v-model="full_name" placeholder="Nombre completo" required />
+        <input v-model="avatar_url" placeholder="URL del avatar" required />
+        <input v-model="username" placeholder="Nombre de usuario" required />
         <button type="submit">Actualizar perfil</button>
       </form>
+      <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useUserStore } from "../stores/user";
-import NavComponent from "@/components/NavComponent.vue";
+import { ref } from 'vue'
+import { useUserStore } from '../stores/user'
 
-const userStore = useUserStore();
-const full_name = ref("");
-const avatar_url = ref("");
-const username = ref("");
+const userStore = useUserStore()
+const full_name = ref('')
+const avatar_url = ref('')
+const username = ref('')
+const successMessage = ref('')
 
 const updateProfile = async () => {
   try {
-    await userStore.updateProfile(
-      full_name.value,
-      avatar_url.value,
-      username.value
-    );
+    await userStore.updateProfile(full_name.value, avatar_url.value, username.value)
 
-    full_name.value = "";
-    avatar_url.value = "";
-    username.value = "";
+    full_name.value = ''
+    avatar_url.value = ''
+    username.value = ''
+    successMessage.value = 'Perfil actualizado con éxito!'
   } catch (error) {
-    console.error("Error al actualizar el perfil:", error.message);
+    console.error('Error al actualizar el perfil:', error.message)
+    successMessage.value = 'Hubo un error al actualizar el perfil. Por favor, inténtalo de nuevo.'
   }
-  await userStore.fetchProfile();
-};
+  await userStore.fetchProfile()
+}
 </script>
 
 <style scoped>

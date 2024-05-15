@@ -1,22 +1,19 @@
 import { defineStore } from 'pinia'
-import supabase from '@supabase/supabase-js'
+import { supabase } from '../supabase'
 
 export const usePostStore = defineStore({
-  id: 'posts',
+  id: 'post',
   state: () => ({
+    posts: [],
     post: {
       title: '',
       subtitle: '',
       image: null,
       text: '',
-      authorName: '',
-      socialLinks: {
-        linkedin: '',
-        x: '',
-        instagram: ''
-      },
+      author_name: '',
       date: ''
-    }
+    },
+    errorMessage: ''
   }),
   actions: {
     async fetchPostList() {
@@ -28,7 +25,7 @@ export const usePostStore = defineStore({
         }
         if (data && data.length > 0) {
           this.posts = data
-          this.errorMessage = null
+          this.errorMessage = ''
         }
       } catch (error) {
         console.error('Error al obtener la lista de posts:', error.message)
@@ -48,13 +45,30 @@ export const usePostStore = defineStore({
     updateText(text) {
       this.post.text = text
     },
-    updateSocialLinks({ linkedin, x, instagram }) {
-      this.post.socialLinks.linkedin = linkedin
-      this.post.socialLinks.x = x
-      this.post.socialLinks.instagram = instagram
-    },
     updateDate(date) {
       this.post.date = new Date(date)
+    },
+    updatePost(postData) {
+      Object.assign(this.post, postData)
+    },
+    updateAuthorName(author_name) {
+      this.post.author_name = author_name
+    },
+    async createPost() {
+      try {
+        const { data, error } = await supabase.from('posts').insert([this.post])
+        if (error) {
+          this.errorMessage = 'Error al crear el post.'
+          throw error
+        }
+        if (data) {
+          this.fetchPostList() // Refrescar la lista de posts después de crear uno
+          this.errorMessage = ''
+        }
+      } catch (error) {
+        console.error('Error al crear el post:', error.message)
+        this.errorMessage = 'Error al crear el post. Por favor, inténtalo de nuevo más tarde.'
+      }
     }
   }
 })

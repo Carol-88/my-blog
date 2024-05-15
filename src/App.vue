@@ -3,6 +3,7 @@ import { useUserStore } from './stores/user.js'
 import { usePostStore } from './stores/postStore.js'
 import { useRouter } from 'vue-router'
 import { onMounted } from 'vue'
+import NavComponent from './components/NavComponent.vue'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -26,5 +27,6 @@ onMounted(async () => {
 </script>
 
 <template>
+  <NavComponent />
   <router-view />
 </template>

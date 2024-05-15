@@ -9,11 +9,11 @@
 </template>
 
 <script setup>
-import { useUserStore } from "../stores/user";
-import { storeToRefs } from "pinia";
+import { useUserStore } from '../stores/user'
+import { storeToRefs } from 'pinia'
 
-const userStore = useUserStore();
-const { profile } = storeToRefs(userStore);
+const userStore = useUserStore()
+const { profile } = storeToRefs(userStore)
 </script>
 
 <style scoped>

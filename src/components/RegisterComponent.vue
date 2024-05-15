@@ -70,18 +70,31 @@ const confirmPasswordError = computed(() => {
   return null
 })
 
-// const isValid = computed(() => {
-//   return (
-//     !emailError.value && !passwordError.value && !confirmPasswordError.value
-//   );
-// });
+const checkIfEmailExists = async () => {
+  try {
+    const exists = await userStore.checkIfEmailExists(email.value)
+    if (exists) {
+      emailError.value = 'El correo electrónico ya está registrado.'
+    } else {
+      emailError.value = null // O cualquier otro mensaje de éxito
+    }
+  } catch (error) {
+    console.error('Error al verificar si el correo electrónico existe:', error.message)
+    emailError.value =
+      'Error al verificar si el correo electrónico existe. Por favor, inténtalo de nuevo.'
+  }
+}
 
 const handleSubmit = async () => {
-  // if (!isValid.value) return;
-  try {
-    await userStore.signUp(email.value, password.value)
-  } catch (error) {
-    alert.error('Error al registrarse:', error.message)
+  // Verificar si el correo electrónico ya existe antes de proceder con el registro
+  await checkIfEmailExists()
+  if (!emailError.value) {
+    try {
+      await userStore.signUp(email.value, password.value)
+      // Mostrar mensaje de éxito o redirigir al usuario
+    } catch (error) {
+      alert.error('Error al registrarse:', error.message)
+    }
   }
 }
 </script>
