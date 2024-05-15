@@ -2,7 +2,6 @@
   <section>
     <article v-if="userStore.user">
       <LoginComponent />
-      <LogoutComponent />
     </article>
     <article v-else>
       <RegisterComponent />
@@ -12,7 +11,6 @@
 
 <script setup>
 import { useUserStore } from '@/stores/user'
-import LogoutComponent from '@/components/LogoutComponent.vue'
 import RegisterComponent from '@/components/RegisterComponent.vue'
 import LoginComponent from '@/components/LoginComponent.vue'
 

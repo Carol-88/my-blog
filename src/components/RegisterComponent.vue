@@ -43,6 +43,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useUserStore } from '../stores/user.js'
+import { useRouter } from 'vue-router'
 
 const userStore = useUserStore()
 const email = ref('')
@@ -91,7 +92,9 @@ const handleSubmit = async () => {
   if (!emailError.value) {
     try {
       await userStore.signUp(email.value, password.value)
-      // Mostrar mensaje de éxito o redirigir al usuario
+      alert.success('Registro exitoso!, revisa tu correo electrónico para activar tu cuenta.')
+      const router = useRouter()
+      router.push('/login')
     } catch (error) {
       alert.error('Error al registrarse:', error.message)
     }

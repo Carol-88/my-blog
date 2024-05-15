@@ -3,7 +3,7 @@
     <form @submit.prevent="handleSubmit">
       <input v-model="post.title" placeholder="Título" required />
       <input v-model="post.subtitle" placeholder="Subtítulo" required />
-      <input type="file" @change="handleImageUpload" />
+      <input type="text" placeholder="URL image" @change="handleImageUpload" />
       <textarea v-model="post.text" placeholder="Texto del post" required></textarea>
       <input type="text" v-model="authorName" placeholder="Nombre del Autor" required />
       <input type="date" v-model="post.date" required />
