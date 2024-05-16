@@ -1,9 +1,9 @@
 <template>
-  <div class="post-detail">
-    <div v-if="activePost" class="loading-state">
+  <div class="post-detail" v-if="activePost">
+    <div v-if="!activePost" class="loading-state">
       <p>Cargando...</p>
     </div>
-    <div v-else-if="activePost && activePost.title" class="post-content">
+    <div v-else class="post-content">
       <h2>{{ activePost.title }}</h2>
       <p>{{ activePost.subtitle }}</p>
       <img v-if="activePost.image" :src="activePost.image" alt="Imagen del post" />
@@ -17,20 +17,17 @@
 <script setup>
 import { usePostStore } from '../stores/postStore.js'
 import { useRouter } from 'vue-router'
-import { ref, watchEffect } from 'vue'
+import { watchEffect } from 'vue'
+import { storeToRefs } from 'pinia'
 
 const postStore = usePostStore()
 const router = useRouter()
 
-// Utilizar ref para almacenar el post activo
-const activePost = ref(null)
+const { activePost } = storeToRefs(postStore)
 
-// Actualizar el post activo cuando cambia la ruta
 watchEffect(() => {
   const postId = router.currentRoute.value.params.id
-  postStore.loadPostById(postId).then((post) => {
-    activePost.value = post
-  })
+  postStore.loadPostById(postId)
 })
 
 function formatDate(dateString) {
@@ -43,7 +40,6 @@ function formatDate(dateString) {
 .post-detail {
   max-width: 800px;
   margin: auto;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 

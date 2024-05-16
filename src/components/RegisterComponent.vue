@@ -77,7 +77,7 @@ const checkIfEmailExists = async () => {
     if (exists) {
       emailError.value = 'El correo electrónico ya está registrado.'
     } else {
-      emailError.value = null // O cualquier otro mensaje de éxito
+      emailError.value = null
     }
   } catch (error) {
     console.error('Error al verificar si el correo electrónico existe:', error.message)
@@ -87,7 +87,6 @@ const checkIfEmailExists = async () => {
 }
 
 const handleSubmit = async () => {
-  // Verificar si el correo electrónico ya existe antes de proceder con el registro
   await checkIfEmailExists()
   if (!emailError.value) {
     try {

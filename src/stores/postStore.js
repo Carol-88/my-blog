@@ -57,9 +57,9 @@ export const usePostStore = defineStore({
     },
     async loadPostById(id) {
       try {
-        let { data: posts } = await supabase.from('posts').select('id')
-
-        const post = posts.find((p) => p.id === id)
+        let { data: posts } = await supabase.from('posts').select('*').eq('id', id)
+        console.log(posts[0])
+        const post = posts[0]
 
         if (post) {
           this.activePost = post
@@ -74,11 +74,8 @@ export const usePostStore = defineStore({
 
     async createPost() {
       try {
-        const { data, error } = await supabase.from('posts').insert([this.post])
-        if (error) {
-          this.errorMessage = 'Error al crear el post.'
-          throw error
-        }
+        const { data } = await supabase.from('posts').insert([this.post])
+
         if (data) {
           this.fetchPostList()
           this.errorMessage = ''

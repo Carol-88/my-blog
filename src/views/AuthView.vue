@@ -27,7 +27,7 @@ a {
 }
 
 .hover {
-  --c: darkred; /* el color */
+  --c: darkred;
   color: #0000;
   background:
     linear-gradient(90deg, #c86666 50%, var(--c) 0) calc(100% - var(--_p, 0%)) / 200%,

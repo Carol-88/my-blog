@@ -45,6 +45,7 @@ function navigateToPostDetail(post) {
 }
 
 .post-item {
+  display: flex;
   border-bottom: 1px solid #ccc;
   padding: 10px;
   margin: 10px;
@@ -54,6 +55,9 @@ function navigateToPostDetail(post) {
   box-shadow:
     rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: stretch;
 }
 
 .post-item img {

@@ -13,10 +13,9 @@ onMounted(async () => {
   try {
     await userStore.fetchUser()
     if (!userStore.user) {
-      // Asegúrate de acceder al usuario a través de la tienda
-      router.push({ name: 'auth' }) // Usa nombres de rutas para mayor claridad
+      router.push({ name: 'auth' })
     } else {
-      router.push({ name: 'home' }) // Asume que tienes una ruta llamada 'Home'
+      router.push({ name: 'home' })
       await postStore.fetchPostList()
       // await userStore.fetchProfile()
     }
@@ -30,3 +29,15 @@ onMounted(async () => {
   <NavComponent />
   <router-view />
 </template>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+</style>
