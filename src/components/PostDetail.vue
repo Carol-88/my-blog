@@ -52,10 +52,11 @@ function formatDate(dateString) {
 }
 
 .post-content {
-  background-color: #fff;
   border-radius: 8px;
   padding: 24px;
+  font-size: x-large;
   margin-top: 20px;
+  background-color: #9bb4c1;
 }
 
 .post-content h2 {
@@ -68,7 +69,7 @@ function formatDate(dateString) {
 .post-content p {
   margin-bottom: 12px;
   line-height: 1.6;
-  color: #666;
+  color: #333;
 }
 
 .post-content img {
@@ -80,7 +81,7 @@ function formatDate(dateString) {
 .post-content small {
   display: block;
   margin-top: 16px;
-  color: #999;
+  color: #636363;
 }
 
 .post-content ul {

@@ -13,5 +13,7 @@ import PostList from '../components/PostList.vue'
 .home {
   padding: 20px;
   text-align: center;
+  color: aliceblue;
+  background-color: none;
 }
 </style>

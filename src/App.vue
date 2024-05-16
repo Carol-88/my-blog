@@ -36,8 +36,24 @@ onMounted(async () => {
   padding: 0;
   border: 0;
   box-sizing: border-box;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
+  font-family: monospace;
+}
+
+html {
+  background-color: rgb(6 43 50);
+}
+
+button {
+  padding: 12px 24px;
+  background-color: #011c39; /* Mantén el color azul vibrante para el botón */
+  color: white;
+  border: none;
+  border-radius: 8px; /* Bordes redondeados */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #00366f;
 }
 </style>

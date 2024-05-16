@@ -46,18 +46,21 @@ function navigateToPostDetail(post) {
 
 .post-item {
   display: flex;
-  border-bottom: 1px solid #ccc;
   padding: 10px;
   margin: 10px;
   width: 50%;
   height: 500px;
   box-sizing: border-box;
+  color: #333;
+  font-size: large;
   box-shadow:
     rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: stretch;
+  background-color: #9bb4c1;
+  border-radius: 2%;
 }
 
 .post-item img {
@@ -71,7 +74,7 @@ function navigateToPostDetail(post) {
 }
 
 .post-item small {
-  color: #777;
+  color: #333;
   display: block;
   margin-top: 5px;
 }

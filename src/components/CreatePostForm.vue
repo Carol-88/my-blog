@@ -12,7 +12,7 @@
         required
       ></textarea>
       <input class="form-date-input" type="date" v-model="post.date" required />
-      <button class="form-button" type="submit">Publicar</button>
+      <button type="submit">Publicar</button>
     </form>
   </div>
 </template>
@@ -36,6 +36,14 @@ const handleSubmit = async () => {
 </script>
 
 <style scoped>
+input {
+  background-color: #eaebf4;
+}
+
+textarea {
+  background-color: #eaebf4;
+}
+
 .main-container {
   display: flex;
   flex-direction: column;
@@ -44,23 +52,28 @@ const handleSubmit = async () => {
   min-height: 100vh; /* Asegura que el contenedor ocupe toda la altura disponible */
   font-family: Arial, sans-serif;
   box-sizing: border-box;
-  padding: 0 2rem 2rem 0;
+  padding: 0 0 2rem 0;
 }
 
 .banner-image {
-  max-width: 1200px; /* Limita el ancho máximo para evitar distorsión */
+  width: 100%;
   height: 400px; /* Mantiene la relación de aspecto */
-  object-fit: contain; /* Asegura que la imagen cubra el área sin distorsionarse */
+  object-fit: cover; /* Asegura que la imagen cubra el área sin distorsionarse */
 }
 
 .create-post-form {
-  max-width: 1200px; /* Define un ancho máximo para el formulario */
-  width: 90%; /* Utiliza un porcentaje para adaptabilidad */
-  background-color: #ffffff; /* Fondo blanco para un look más limpio */
-  border-radius: 12px; /* Bordes más redondeados para un aspecto moderno */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave para profundidad */
-  padding: 20px; /* Espacio interno para contenido */
-  margin-top: 20px; /* Espacio desde la imagen hasta el formulario */
+  display: flex;
+  max-width: 750px;
+  height: 600px;
+  width: 90%;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 20px;
+  flex-direction: column;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
 }
 
 /* Los estilos para los inputs y botones pueden mantenerse similares, pero puedes ajustar los colores y sombras para mejorar la coherencia visual */
@@ -68,32 +81,17 @@ const handleSubmit = async () => {
 .form-input,
 .form-textarea,
 .form-date-input {
-  padding: 12px;
-  border: 1px solid #ddd; /* Color de borde más claro */
-  border-radius: 8px; /* Bordes redondeados */
+  padding: 21px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
   font-size: 16px;
   width: 100%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Sombra muy suave */
-  margin-bottom: 10px; /* Espacio entre elementos */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .form-textarea {
   resize: none;
   min-height: 120px; /* Altura mínima para el textarea */
-}
-
-.form-button {
-  padding: 12px 24px;
-  background-color: #007bff; /* Mantén el color azul vibrante para el botón */
-  color: white;
-  border: none;
-  border-radius: 8px; /* Bordes redondeados */
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.form-button:hover {
-  background-color: #0056b3; /* Cambio de color al pasar el mouse */
 }
 
 /* Media query para dispositivos móviles */

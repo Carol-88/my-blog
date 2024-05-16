@@ -26,18 +26,29 @@ nav {
   display: flex;
   justify-content: space-around;
   padding: 20px 40px;
-  background-color: #333;
+  background-color: rgba(0, 11, 10, 0.449);
   color: white;
 }
 
 nav a {
   color: inherit;
+  margin: 10px 20px;
+  font-size: large;
   text-decoration: none;
   transition: color 0.3s ease;
+  background: none;
 }
 
 nav a:hover {
-  color: #ddd;
+  color: #084757;
+}
+
+button {
+  background-color: #00366f;
+}
+
+button:hover {
+  background-color: #011c39;
 }
 
 @media (max-width: 768px) {
