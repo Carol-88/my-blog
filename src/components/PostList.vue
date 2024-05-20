@@ -1,15 +1,11 @@
 <template>
   <div class="post-list">
-    <div
-      v-for="(post, index) in posts"
-      :key="index"
-      class="post-item"
-      @click="navigateToPostDetail(post)"
-    >
+    <div v-for="(post, index) in posts" :key="index" class="post-item">
       <h3>{{ post.title || 'Título no disponible' }}</h3>
       <p>{{ post.subtitle || 'Subtítulo no disponible' }}</p>
       <img v-if="post.image" :src="post.image" alt="Imagen del post" />
-      <p>{{ post.text || 'Contenido no disponible' }}</p>
+      <div v-html="getFirstParagraph(post.text)" class="post-text"></div>
+      <button @click="navigateToPostDetail(post)">Ver más</button>
       <small>{{ post.authorName || 'Autor desconocido' }}</small>
       <small>{{ formatDate(post.date) }}</small>
     </div>
@@ -34,22 +30,36 @@ function formatDate(dateString) {
 function navigateToPostDetail(post) {
   router.push({ name: 'postdetail', params: { id: post.id } })
 }
+
+function getFirstParagraph(text) {
+  if (!text) return 'Contenido no disponible'
+  const paragraphEnd = text.indexOf('\n')
+  if (paragraphEnd !== -1) {
+    return text.substring(0, paragraphEnd)
+  } else {
+    const sentenceEnd = text.indexOf('. ')
+    if (sentenceEnd !== -1) {
+      return text.substring(0, sentenceEnd + 1)
+    } else {
+      return text
+    }
+  }
+}
 </script>
 
 <style scoped>
 .post-list {
   padding: 20px;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
 }
 
 .post-item {
   display: flex;
   padding: 10px;
-  margin: 10px;
-  width: 50%;
-  height: 500px;
+  margin: 0;
+  width: 100%;
   box-sizing: border-box;
   color: #333;
   font-size: large;
@@ -59,13 +69,15 @@ function navigateToPostDetail(post) {
   flex-direction: column;
   justify-content: space-evenly;
   align-items: stretch;
-  background-color: #9bb4c1;
+  background-color: #d8d8d8;
   border-radius: 2%;
+  height: 550px;
+  overflow: auto;
 }
 
 .post-item img {
   width: 100%;
-  height: auto;
+  height: 250px;
   object-fit: cover;
   border-radius: 5px;
   box-shadow:
@@ -79,9 +91,8 @@ function navigateToPostDetail(post) {
   margin-top: 5px;
 }
 
-@media (max-width: 768px) {
-  .post-item {
-    width: calc(100% - 20px);
-  }
+.post-text {
+  margin: 10px;
+  font-size: medium;
 }
 </style>

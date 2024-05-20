@@ -34,14 +34,19 @@ const lastThreePosts = computed(() => {
 </script>
 
 <style scoped>
+h2 {
+  padding: 0 1rem 1rem 0;
+  text-align: center;
+}
 .last-posts {
-  width: 100%; /* Ajusta el ancho según sea necesario */
-  max-width: 400px; /* Máximo ancho para mantener el diseño limpio */
-  /* Centrado y margen */
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+  color: #fff;
 }
 
 .post-card {
-  background-color: #fff;
+  background-color: #d8d8d8;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
