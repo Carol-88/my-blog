@@ -35,9 +35,11 @@ const lastThreePosts = computed(() => {
 
 <style scoped>
 h2 {
-  padding: 0 1rem 1rem 0;
+  padding: 1rem 0;
   text-align: center;
+  color: #fff;
 }
+
 .last-posts {
   width: 100%;
   max-width: 400px;
@@ -46,7 +48,7 @@ h2 {
 }
 
 .post-card {
-  background-color: #d8d8d8;
+  background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -78,5 +80,29 @@ h2 {
 .post-info small {
   font-size: 12px;
   color: #999;
+}
+
+/* Media query para dispositivos móviles */
+@media (max-width: 768px) {
+  .last-posts {
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  .post-card img {
+    height: 150px; /* Ajustar la altura de la imagen en móviles */
+  }
+
+  .post-info h3 {
+    font-size: 16px;
+  }
+
+  .post-info p {
+    font-size: 12px;
+  }
+
+  .post-info small {
+    font-size: 10px;
+  }
 }
 </style>

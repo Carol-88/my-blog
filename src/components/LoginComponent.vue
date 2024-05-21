@@ -16,6 +16,7 @@ import { usePostStore } from '../stores/postStore.js'
 import { useRouter } from 'vue-router'
 
 const userStore = useUserStore()
+const postStore = usePostStore()
 const router = useRouter()
 const loginEmail = ref('')
 const loginPassword = ref('')
@@ -25,7 +26,7 @@ const handleSubmit = async () => {
     await userStore.signInWithEmail(loginEmail.value, loginPassword.value)
     if (userStore.user) {
       await userStore.fetchUser()
-      await usePostStore.fetchPostsList()
+      await postStore.fetchPostList()
       router.push({ path: '/' })
     }
   } catch (error) {

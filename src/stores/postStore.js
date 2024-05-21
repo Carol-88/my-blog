@@ -1,3 +1,4 @@
+// stores.postStore.js
 import { defineStore } from 'pinia'
 import { supabase } from '../supabase'
 
@@ -14,17 +15,16 @@ export const usePostStore = defineStore({
       author_name: '',
       date: ''
     },
-    errorMessage: ''
+    errorMessage: '',
+    isLoading: false // Añadir un estado de carga
   }),
   actions: {
     async fetchPostList() {
+      this.isLoading = true
       try {
         const { data, error } = await supabase.from('posts').select('*')
-        if (error) {
-          this.errorMessage = 'Error al obtener la lista de posts.'
-          throw error
-        }
-        if (data && data.length > 0) {
+        if (error) throw error
+        if (data) {
           this.posts = data
           this.errorMessage = ''
         }
@@ -32,6 +32,8 @@ export const usePostStore = defineStore({
         console.error('Error al obtener la lista de posts:', error.message)
         this.errorMessage =
           'Error al obtener la lista de posts. Por favor, inténtalo de nuevo más tarde.'
+      } finally {
+        this.isLoading = false
       }
     },
     updatePostTitle(title) {
@@ -56,26 +58,28 @@ export const usePostStore = defineStore({
       this.post.author_name = author_name
     },
     async loadPostById(id) {
+      this.isLoading = true
       try {
-        let { data: posts } = await supabase.from('posts').select('*').eq('id', id)
-        console.log(posts[0])
+        const { data: posts, error } = await supabase.from('posts').select('*').eq('id', id)
+        if (error) throw error
         const post = posts[0]
-
         if (post) {
           this.activePost = post
         } else {
           console.log('Post not found')
         }
       } catch (error) {
-        console.error('Error al cargar el post por ID:', error)
-        throw error
+        console.error('Error al cargar el post por ID:', error.message)
+        this.errorMessage = 'Error al cargar el post. Por favor, inténtalo de nuevo más tarde.'
+      } finally {
+        this.isLoading = false
       }
     },
-
     async createPost() {
+      this.isLoading = true
       try {
-        const { data } = await supabase.from('posts').insert([this.post])
-
+        const { data, error } = await supabase.from('posts').insert([this.post])
+        if (error) throw error
         if (data) {
           this.fetchPostList()
           this.errorMessage = ''
@@ -83,6 +87,8 @@ export const usePostStore = defineStore({
       } catch (error) {
         console.error('Error al crear el post:', error.message)
         this.errorMessage = 'Error al crear el post. Por favor, inténtalo de nuevo más tarde.'
+      } finally {
+        this.isLoading = false
       }
     }
   }

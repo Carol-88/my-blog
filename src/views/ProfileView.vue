@@ -33,17 +33,33 @@ const successMessage = ref('')
 
 const updateProfile = async () => {
   try {
+    // Validación de entradas
+    if (!validateInputs()) {
+      errorMessage.value = 'Por favor, completa todos los campos.'
+      return
+    }
+
     await userStore.updateProfile(full_name.value, avatar_url.value, username.value)
 
-    full_name.value = ''
-    avatar_url.value = ''
-    username.value = ''
+    // Limpiar campos después de la actualización exitosa
+    clearFields()
     successMessage.value = 'Perfil actualizado con éxito!'
   } catch (error) {
     console.error('Error al actualizar el perfil:', error.message)
     errorMessage.value = 'Hubo un error al actualizar el perfil. Por favor, inténtalo de nuevo.'
   }
-  await userStore.fetchProfile()
+}
+
+const validateInputs = () => {
+  return (
+    full_name.value.trim() !== '' && avatar_url.value.trim() !== '' && username.value.trim() !== ''
+  )
+}
+
+const clearFields = () => {
+  full_name.value = ''
+  avatar_url.value = ''
+  username.value = ''
 }
 </script>
 
@@ -51,6 +67,7 @@ const updateProfile = async () => {
 p {
   font-weight: 600;
 }
+
 .userinfo {
   padding: 0 2rem;
   text-align: start;
@@ -63,6 +80,45 @@ section {
   text-align: center;
   align-items: center;
   width: 100vw;
+}
+
+/* Estilos para mensajes de error y éxito */
+.error-message {
+  color: red;
+}
+
+.success-message {
+  color: green;
+}
+
+/* Estilos para el formulario */
+.container {
+  margin-top: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+input {
+  margin-bottom: 10px;
+  padding: 5px;
+  width: 300px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
 }
 
 @media (max-width: 768px) {

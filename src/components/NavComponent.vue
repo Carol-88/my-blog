@@ -1,10 +1,10 @@
 <template>
   <nav>
     <router-link to="/">Home</router-link>
-    <router-link to="/auth">Login / Register</router-link>
-    <router-link to="/profile">Profile</router-link>
-    <router-link to="/createpost">Create Post</router-link>
-    <button @click="handleLogout">Logout</button>
+    <router-link v-if="!userStore.isLoggedIn" to="/auth">Login / Register</router-link>
+    <router-link v-if="userStore.isLoggedIn" to="/profile">Profile</router-link>
+    <router-link v-if="userStore.isLoggedIn" to="/createpost">Create Post</router-link>
+    <button v-if="userStore.isLoggedIn" @click="handleLogout">Logout</button>
   </nav>
 </template>
 
@@ -45,6 +45,12 @@ nav a:hover {
 
 button {
   background-color: #00366f;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {

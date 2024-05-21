@@ -1,21 +1,16 @@
 <script setup>
 import { useUserStore } from './stores/user.js'
 import { usePostStore } from './stores/postStore.js'
-import { useRouter } from 'vue-router'
-import { onMounted } from 'vue'
 import NavComponent from './components/NavComponent.vue'
+import { onMounted } from 'vue'
 
-const router = useRouter()
 const userStore = useUserStore()
 const postStore = usePostStore()
 
 onMounted(async () => {
   try {
     await userStore.fetchUser()
-    if (!userStore.user) {
-      router.push({ name: 'auth' })
-    } else {
-      router.push({ name: 'home' })
+    if (userStore.isLoggedIn) {
       await postStore.fetchPostList()
       await userStore.fetchProfile()
     }

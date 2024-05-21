@@ -23,7 +23,7 @@ import NavComponent from '../components/NavComponent.vue'
 .home {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Asegura que.home ocupe al menos toda la altura de la ventana */
+  min-height: 100vh; /* Asegura que .home ocupe al menos toda la altura de la ventana */
 }
 
 .navbar {
@@ -40,7 +40,7 @@ import NavComponent from '../components/NavComponent.vue'
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  flex-grow: 1; /* Permite que.content crezca para ocupar el espacio disponible */
+  flex-grow: 1; /* Permite que .content crezca para ocupar el espacio disponible */
   margin-top: 60px; /* Espacio desde el navbar hasta el contenido principal */
 }
 

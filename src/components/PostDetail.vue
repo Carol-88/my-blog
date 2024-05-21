@@ -1,9 +1,9 @@
 <template>
-  <div class="post-detail" v-if="activePost">
-    <div v-if="!activePost" class="loading-state">
+  <div class="post-detail">
+    <div v-if="isLoading" class="loading-state">
       <p>Cargando...</p>
     </div>
-    <div v-else class="post-content">
+    <div v-else-if="activePost" class="post-content">
       <h2>{{ activePost.title }}</h2>
       <p>{{ activePost.subtitle }}</p>
       <img v-if="activePost.image" :src="activePost.image" alt="Imagen del post" />
@@ -11,23 +11,28 @@
       <small>{{ activePost.authorName }}</small>
       <small class="small-text">{{ formatDate(activePost.date) }}</small>
     </div>
+    <div v-else class="no-post">
+      <p>El post no se ha encontrado.</p>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { usePostStore } from '../stores/postStore.js'
 import { useRouter } from 'vue-router'
-import { watchEffect } from 'vue'
+import { ref, watchEffect } from 'vue'
 import { storeToRefs } from 'pinia'
 
 const postStore = usePostStore()
 const router = useRouter()
-
 const { activePost } = storeToRefs(postStore)
+const isLoading = ref(true)
 
-watchEffect(() => {
+watchEffect(async () => {
+  isLoading.value = true
   const postId = router.currentRoute.value.params.id
-  postStore.loadPostById(postId)
+  await postStore.loadPostById(postId)
+  isLoading.value = false
 })
 
 function formatDate(dateString) {
@@ -41,9 +46,11 @@ function formatDate(dateString) {
   max-width: 800px;
   margin: auto;
   overflow: hidden;
+  padding: 20px;
 }
 
-.loading-state {
+.loading-state,
+.no-post {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -82,25 +89,6 @@ function formatDate(dateString) {
   display: block;
   margin-top: 16px;
   color: #636363;
-}
-
-.post-content ul {
-  list-style-type: none;
-  padding-left: 0;
-  margin-top: 16px;
-}
-
-.post-content ul li {
-  margin-bottom: 8px;
-}
-
-.post-content ul li a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.post-content ul li a:hover {
-  text-decoration: underline;
 }
 
 .small-text {

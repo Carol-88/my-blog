@@ -4,7 +4,7 @@
     <form @submit.prevent="handleSubmit" class="create-post-form">
       <input class="form-input" v-model="post.title" placeholder="Título" required />
       <input class="form-input" v-model="post.subtitle" placeholder="Subtítulo" required />
-      <input class="form-input" type="text" placeholder="URL image" required />
+      <input class="form-input" v-model="post.image" placeholder="URL de la imagen" required />
       <textarea
         class="form-textarea"
         v-model="post.text"
@@ -19,15 +19,23 @@
 
 <script setup>
 import { usePostStore } from '../stores/postStore'
-import { toRefs } from 'vue'
+import { toRef } from 'vue'
 
 const postStore = usePostStore()
-const { post } = toRefs(postStore)
+const post = toRef(postStore, 'post')
 
 const handleSubmit = async () => {
   try {
-    await postStore.createPost(post)
+    await postStore.createPost(post.value)
     alert('Post creado exitosamente!')
+    // Limpiar el formulario después de la creación del post
+    post.value = {
+      title: '',
+      subtitle: '',
+      image: '',
+      text: '',
+      date: ''
+    }
   } catch (error) {
     console.error('Error al crear el post:', error)
     alert('Hubo un error al crear el post. Por favor, inténtalo de nuevo.')

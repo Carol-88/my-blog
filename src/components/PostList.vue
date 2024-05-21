@@ -57,22 +57,28 @@ function getFirstParagraph(text) {
 
 .post-item {
   display: flex;
-  padding: 10px;
-  margin: 0;
-  width: 100%;
-  box-sizing: border-box;
-  color: #333;
-  font-size: large;
-  box-shadow:
-    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
   flex-direction: column;
-  justify-content: space-evenly;
-  align-items: stretch;
+  padding: 10px;
   background-color: #d8d8d8;
-  border-radius: 2%;
-  height: 550px;
-  overflow: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  color: #333;
+  transition: transform 0.2s;
+}
+
+.post-item:hover {
+  transform: translateY(-5px);
+}
+
+.post-item h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.post-item p {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
 }
 
 .post-item img {
@@ -80,19 +86,32 @@ function getFirstParagraph(text) {
   height: 250px;
   object-fit: cover;
   border-radius: 5px;
-  box-shadow:
-    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  margin-bottom: 10px;
+}
+
+.post-item button {
+  margin-top: auto;
+  padding: 10px;
+  background-color: #00366f;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.post-item button:hover {
+  background-color: #011c39;
 }
 
 .post-item small {
   color: #333;
   display: block;
-  margin-top: 5px;
+  margin-top: 10px;
 }
 
 .post-text {
-  margin: 10px;
-  font-size: medium;
+  font-size: 1rem;
+  margin-bottom: 10px;
 }
 </style>
