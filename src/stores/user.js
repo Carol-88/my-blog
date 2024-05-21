@@ -9,11 +9,13 @@ export const useUserStore = defineStore({
     profile: null,
     errorMessage: null
   }),
+  getters: {
+    isLoggedIn: (state) => !!state.user // Devuelve true si user no es null
+  },
   actions: {
     async fetchUser() {
       try {
         const { data } = await supabase.auth.getUser()
-
         if (data && data.user) {
           this.user = data.user
           this.errorMessage = null
@@ -48,7 +50,9 @@ export const useUserStore = defineStore({
           this.user = data.user
           console.log(this.user)
           this.errorMessage = null
-          await this.fetchUser()
+          // await this.fetchUser()
+          // await this.fetchPostList()
+          // await this.fetchProfile()
           router.push({ path: '/' })
         }
       } catch (error) {
@@ -68,7 +72,39 @@ export const useUserStore = defineStore({
         this.errorMessage = 'Error al cerrar sesión. Por favor, inténtalo de nuevo más tarde.'
       }
     },
+    async fetchProfile() {
+      if (!this.user || !this.user.id) {
+        this.errorMessage = 'No hay usuario seleccionado o no inició sesión.'
+        return
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .match({ id: this.user.id })
+
+        if (error) {
+          this.errorMessage = 'Error al obtener el perfil.'
+          return
+        }
+        if (!data || data.length === 0) {
+          this.errorMessage = 'Perfil no encontrado.'
+          return
+        }
+        this.profile = data[0]
+        this.errorMessage = null
+      } catch (error) {
+        console.error('Error al obtener el perfil:', error.message)
+        this.errorMessage = 'Error al obtener el perfil. Por favor, inténtalo de nuevo más tarde.'
+      }
+    },
     async updateProfile(full_name, avatar_url, username) {
+      if (!this.user || !this.user.id) {
+        this.errorMessage = 'No hay usuario seleccionado o no inició sesión.'
+        return
+      }
+
       try {
         let newUsername = this.profile.username
         let newAvatarUrl = this.profile.avatar_url
@@ -85,7 +121,8 @@ export const useUserStore = defineStore({
             avatar_url: newAvatarUrl,
             username: newUsername
           })
-          .match({ id: this.user?.id })
+          .match({ id: this.user.id })
+
         if (error) throw error
         this.profile = {
           username: newUsername,
@@ -97,33 +134,6 @@ export const useUserStore = defineStore({
         console.error('Error al actualizar el perfil:', error.message)
         this.errorMessage =
           'Error al actualizar el perfil. Por favor, inténtalo de nuevo más tarde.'
-      }
-    },
-    async fetchProfile() {
-      if (!this.user) {
-        this.errorMessage = 'No hay usuario seleccionado.'
-        return
-      }
-
-      try {
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .match({ id: this.user.id })
-
-        if (error) {
-          this.errorMessage = 'Error al obtener el perfil.'
-          throw error
-        }
-        this.profile = {
-          username: data[0].username,
-          avatar_url: data[0].avatar_url,
-          full_name: data[0].full_name
-        }
-        this.errorMessage = null
-      } catch (error) {
-        console.error('Error al obtener el perfil:', error.message)
-        this.errorMessage = 'Error al obtener el perfil. Por favor, inténtalo de nuevo más tarde.'
       }
     },
     async deleteUser() {

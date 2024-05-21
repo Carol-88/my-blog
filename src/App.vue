@@ -17,7 +17,7 @@ onMounted(async () => {
     } else {
       router.push({ name: 'home' })
       await postStore.fetchPostList()
-      // await userStore.fetchProfile()
+      await userStore.fetchProfile()
     }
   } catch (e) {
     console.error(e)
