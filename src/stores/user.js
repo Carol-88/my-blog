@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { supabase } from '../supabase'
+import router from '@/router'
 
 export const useUserStore = defineStore({
   id: 'user',
@@ -11,11 +12,8 @@ export const useUserStore = defineStore({
   actions: {
     async fetchUser() {
       try {
-        const { data, error } = await supabase.auth.getUser()
-        if (error) {
-          this.errorMessage = 'Error al obtener el usuario.'
-          throw error
-        }
+        const { data } = await supabase.auth.getUser()
+
         if (data && data.user) {
           this.user = data.user
           this.errorMessage = null
@@ -46,8 +44,13 @@ export const useUserStore = defineStore({
           password: password
         })
         if (error) throw error
-        if (data) this.user = data.user
-        this.errorMessage = null
+        if (data) {
+          this.user = data.user
+          console.log(this.user)
+          this.errorMessage = null
+          await this.fetchUser()
+          router.push({ path: '/' })
+        }
       } catch (error) {
         console.error('Error al iniciar sesión:', error.message)
         this.errorMessage = 'Error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.'
@@ -59,70 +62,70 @@ export const useUserStore = defineStore({
         if (error) throw error
         this.user = null
         this.errorMessage = null
+        router.push({ path: '/login' })
       } catch (error) {
         console.error('Error al cerrar sesión:', error.message)
         this.errorMessage = 'Error al cerrar sesión. Por favor, inténtalo de nuevo más tarde.'
       }
     },
-    // async updateProfile(full_name, avatar_url, username) {
-    //   try {
-    //     let newUsername = this.profile.username;
-    //     let newAvatarUrl = this.profile.avatar_url;
-    //     let newFullName = this.profile.full_name;
+    async updateProfile(full_name, avatar_url, username) {
+      try {
+        let newUsername = this.profile.username
+        let newAvatarUrl = this.profile.avatar_url
+        let newFullName = this.profile.full_name
 
-    //     if (full_name) newFullName = full_name;
-    //     if (avatar_url) newAvatarUrl = avatar_url;
-    //     if (username) newUsername = username;
+        if (full_name) newFullName = full_name
+        if (avatar_url) newAvatarUrl = avatar_url
+        if (username) newUsername = username
 
-    //     const { error } = await supabase
-    //       .from("profiles")
-    //       .update({
-    //         full_name: newFullName,
-    //         avatar_url: newAvatarUrl,
-    //         username: newUsername,
-    //       })
-    //       .match({ id: this.user?.id });
-    //     if (error) throw error;
-    //     this.profile = {
-    //       username: newUsername,
-    //       avatar_url: newAvatarUrl,
-    //       full_name: newFullName,
-    //     };
-    //     this.errorMessage = null;
-    //   } catch (error) {
-    //     console.error("Error al actualizar el perfil:", error.message);
-    //     this.errorMessage =
-    //       "Error al actualizar el perfil. Por favor, inténtalo de nuevo más tarde.";
-    //   }
-    // },
-    // async fetchProfile() {
-    //   if (!this.user) {
-    //     this.errorMessage = "No hay usuario seleccionado.";
-    //     return;
-    //   }
+        const { error } = await supabase
+          .from('profiles')
+          .update({
+            full_name: newFullName,
+            avatar_url: newAvatarUrl,
+            username: newUsername
+          })
+          .match({ id: this.user?.id })
+        if (error) throw error
+        this.profile = {
+          username: newUsername,
+          avatar_url: newAvatarUrl,
+          full_name: newFullName
+        }
+        this.errorMessage = null
+      } catch (error) {
+        console.error('Error al actualizar el perfil:', error.message)
+        this.errorMessage =
+          'Error al actualizar el perfil. Por favor, inténtalo de nuevo más tarde.'
+      }
+    },
+    async fetchProfile() {
+      if (!this.user) {
+        this.errorMessage = 'No hay usuario seleccionado.'
+        return
+      }
 
-    //   try {
-    //     const { data, error } = await supabase
-    //       .from("profiles")
-    //       .select("*")
-    //       .match({ id: this.user.id });
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .match({ id: this.user.id })
 
-    //     if (error) {
-    //       this.errorMessage = "Error al obtener el perfil.";
-    //       throw error;
-    //     }
-    //     this.profile = {
-    //       username: data[0].username,
-    //       avatar_url: data[0].avatar_url,
-    //       full_name: data[0].full_name,
-    //     };
-    //     this.errorMessage = null;
-    //   } catch (error) {
-    //     console.error("Error al obtener el perfil:", error.message);
-    //     this.errorMessage =
-    //       "Error al obtener el perfil. Por favor, inténtalo de nuevo más tarde.";
-    //   }
-    // },
+        if (error) {
+          this.errorMessage = 'Error al obtener el perfil.'
+          throw error
+        }
+        this.profile = {
+          username: data[0].username,
+          avatar_url: data[0].avatar_url,
+          full_name: data[0].full_name
+        }
+        this.errorMessage = null
+      } catch (error) {
+        console.error('Error al obtener el perfil:', error.message)
+        this.errorMessage = 'Error al obtener el perfil. Por favor, inténtalo de nuevo más tarde.'
+      }
+    },
     async deleteUser() {
       try {
         const { error } = await supabase.from('users').delete().match({ id: this.user?.id })

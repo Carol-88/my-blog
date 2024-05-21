@@ -2,14 +2,7 @@
   <section class="container">
     <h2>Iniciar sesión</h2>
     <form @submit.prevent="handleSubmit">
-      <input
-        v-model="loginEmail"
-        type="email"
-        placeholder="Correo electrónico"
-        required
-        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-        title="Por favor, introduce un correo electrónico válido."
-      />
+      <input v-model="loginEmail" type="email" placeholder="Correo electrónico" required />
       <input v-model="loginPassword" type="password" placeholder="Contraseña" required />
       <button type="submit">Iniciar sesión</button>
     </form>
@@ -19,6 +12,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useUserStore } from '../stores/user.js'
+import { usePostStore } from '../stores/postStore.js'
 import { useRouter } from 'vue-router'
 
 const userStore = useUserStore()
@@ -30,7 +24,8 @@ const handleSubmit = async () => {
   try {
     await userStore.signInWithEmail(loginEmail.value, loginPassword.value)
     if (userStore.user) {
-      await userStore.fetchProfile()
+      await userStore.fetchUser()
+      await usePostStore.fetchPostsList()
       router.push({ path: '/' })
     }
   } catch (error) {
@@ -55,5 +50,16 @@ h2 {
 
 button {
   width: 200px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  width: 400px;
+  margin-top: 5rem;
 }
 </style>

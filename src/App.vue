@@ -56,4 +56,14 @@ button {
 button:hover {
   background-color: #00366f;
 }
+
+input {
+  width: 90%;
+  padding: 10px;
+  margin: 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
 </style>
