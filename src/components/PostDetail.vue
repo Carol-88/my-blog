@@ -8,7 +8,7 @@
       <p>{{ activePost.subtitle }}</p>
       <img v-if="activePost.image" :src="activePost.image" alt="Imagen del post" />
       <p>{{ activePost.text }}</p>
-      <small>{{ activePost.authorName }}</small>
+      <small>{{ activePost.author_name }}</small>
       <small class="small-text">{{ formatDate(activePost.date) }}</small>
     </div>
     <div v-else class="no-post">

@@ -6,7 +6,7 @@
       <img v-if="post.image" :src="post.image" alt="Imagen del post" />
       <div v-html="getFirstParagraph(post.text)" class="post-text"></div>
       <button @click="navigateToPostDetail(post)">Ver más</button>
-      <small>{{ post.authorName || 'Autor desconocido' }}</small>
+      <small>{{ post.author_name || 'Autor desconocido' }}</small>
       <small>{{ formatDate(post.date) }}</small>
     </div>
   </div>
