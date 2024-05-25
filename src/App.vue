@@ -13,6 +13,8 @@ onMounted(async () => {
     if (userStore.isLoggedIn) {
       await postStore.fetchPostList()
       await userStore.fetchProfile()
+    } else {
+      await postStore.fetchPostList()
     }
   } catch (e) {
     console.error(e)
