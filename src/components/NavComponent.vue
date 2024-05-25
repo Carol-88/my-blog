@@ -1,7 +1,7 @@
 <template>
   <nav>
     <router-link to="/">Home</router-link>
-    <router-link v-if="!userStore.isLoggedIn" to="/auth">Login / Register</router-link>
+    <router-link v-if="!userStore.isLoggedIn" to="/auth">Login</router-link>
     <router-link v-if="userStore.isLoggedIn" to="/profile">Profile</router-link>
     <router-link v-if="userStore.isLoggedIn" to="/createpost">Create Post</router-link>
     <button v-if="userStore.isLoggedIn" @click="handleLogout">Logout</button>
