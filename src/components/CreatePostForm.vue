@@ -1,16 +1,14 @@
 <template>
+  <head>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
+  </head>
   <div class="main-container">
     <img src="/crearpost.png" alt="banner crear post" class="banner-image" />
     <form @submit.prevent="handleSubmit" class="create-post-form">
       <input class="form-input" v-model="post.title" placeholder="Título" required />
       <input class="form-input" v-model="post.subtitle" placeholder="Subtítulo" required />
       <input class="form-input" v-model="post.image" placeholder="URL de la imagen" required />
-      <textarea
-        class="form-textarea"
-        v-model="post.text"
-        placeholder="Texto del post"
-        required
-      ></textarea>
+      <div id="quill-editor" class="form-textarea"></div>
       <input class="form-date-input" type="date" v-model="post.date" required />
       <button type="submit">Publicar</button>
     </form>
@@ -20,6 +18,24 @@
 <script setup>
 import { usePostStore } from '../stores/postStore'
 import { toRef } from 'vue'
+import { onMounted } from 'vue'
+import Quill from 'quill'
+
+onMounted(() => {
+  initQuillEditor()
+})
+
+function initQuillEditor() {
+  const quill = new Quill('#quill-editor', {
+    placeholder: 'Compose an epic...',
+    theme: 'snow'
+  })
+
+  // Vincula el contenido del editor a tu modelo de datos
+  quill.on('text-change', () => {
+    post.value.text = quill.root.innerHTML
+  })
+}
 
 const postStore = usePostStore()
 const post = toRef(postStore, 'post')
@@ -44,6 +60,12 @@ const handleSubmit = async () => {
 </script>
 
 <style scoped>
+#quill-editor {
+  min-height: 200px; /* Ajusta según sea necesario */
+  max-height: 300px; /* Limita la altura máxima si es necesario */
+  background-color: #eaebf4;
+}
+
 input {
   background-color: #eaebf4;
 }
@@ -57,7 +79,7 @@ textarea {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh; /* Asegura que el contenedor ocupe toda la altura disponible */
+  min-height: 100%; /* Asegura que el contenedor ocupe toda la altura disponible */
   font-family: Arial, sans-serif;
   box-sizing: border-box;
   padding: 0 0 2rem 0;
@@ -95,6 +117,10 @@ textarea {
   font-size: 16px;
   width: 100%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+button[type='submit'] {
+  align-self: center; /* Centra el botón verticalmente si el formulario usa flexbox */
+  margin-top: 20px; /* Añade un margen superior si es necesario */
 }
 
 .form-textarea {
