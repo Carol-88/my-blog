@@ -79,7 +79,7 @@ textarea {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100%; /* Asegura que el contenedor ocupe toda la altura disponible */
+  min-height: 100vh; /* Asegura que el contenedor ocupe toda la altura disponible */
   font-family: Arial, sans-serif;
   box-sizing: border-box;
   padding: 0 0 2rem 0;
@@ -93,20 +93,19 @@ textarea {
 
 .create-post-form {
   display: flex;
+  flex-direction: column; /* Cambia a columna para que los elementos se apilen verticalmente */
   max-width: 750px;
-  height: 600px;
-  width: 90%;
+  width: 90%; /* Asegura que el formulario no sea demasiado ancho */
   background-color: #ffffff;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
   margin-top: 20px;
-  flex-direction: column;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
+  overflow-y: auto; /* Permite el desplazamiento si el contenido supera la altura del formulario */
+  height: calc(
+    100vh - 200px
+  ); /* Ajusta la altura del formulario para dejar espacio para la barra de desplazamiento */
 }
-
-/* Los estilos para los inputs y botones pueden mantenerse similares, pero puedes ajustar los colores y sombras para mejorar la coherencia visual */
 
 .form-input,
 .form-textarea,
@@ -118,6 +117,7 @@ textarea {
   width: 100%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
+
 button[type='submit'] {
   align-self: center; /* Centra el botón verticalmente si el formulario usa flexbox */
   margin-top: 20px; /* Añade un margen superior si es necesario */
