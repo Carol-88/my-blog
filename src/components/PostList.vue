@@ -4,7 +4,8 @@
       <h3>{{ post.title || 'Título no disponible' }}</h3>
       <p>{{ post.subtitle || 'Subtítulo no disponible' }}</p>
       <img v-if="post.image" :src="post.image" alt="Imagen del post" />
-      <div v-html="getFirstParagraph(post.text)" class="post-text"></div>
+      <!-- Alternativa segura para mostrar texto sin formato -->
+      <div class="post-text">{{ getFirstParagraph(post.text) }}</div>
       <button @click="navigateToPostDetail(post)">Ver más</button>
       <small>{{ post.author_name || 'Autor desconocido' }}</small>
       <small>{{ formatDate(post.date) }}</small>
@@ -33,16 +34,11 @@ function navigateToPostDetail(post) {
 
 function getFirstParagraph(text) {
   if (!text) return 'Contenido no disponible'
-  const paragraphEnd = text.indexOf('\n')
-  if (paragraphEnd !== -1) {
-    return text.substring(0, paragraphEnd)
+  let paragraphs = text.split('\n\n') // Divide el texto en párrafos
+  if (paragraphs.length > 0) {
+    return paragraphs[0] // Devuelve el primer párrafo
   } else {
-    const sentenceEnd = text.indexOf('. ')
-    if (sentenceEnd !== -1) {
-      return text.substring(0, sentenceEnd + 1)
-    } else {
-      return text
-    }
+    return text // Si no hay párrafos, devuelve todo el texto
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="last-posts">
-    <h2>Últimos Posts</h2>
-    <div v-for="post in lastThreePosts" :key="post.id" class="post-card">
+    <h2>Posts Aleatorios</h2>
+    <div v-for="post in randomThreePosts" :key="post.id" class="post-card">
       <img :src="post.image" alt="Imagen del post" />
       <div class="post-info">
         <h3>{{ post.title }}</h3>
@@ -24,12 +24,19 @@ const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString(undefined, options)
 }
 
-// Computed property para obtener los últimos tres posts
-const lastThreePosts = computed(() => {
+// Computed property para obtener tres posts aleatorios
+const randomThreePosts = computed(() => {
   // Crea una copia del array de posts para evitar modificar el original
   const postsCopy = [...postStore.posts]
-  // Ordena los posts por fecha de manera descendente y toma los primeros tres
-  return postsCopy.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3)
+
+  // Genera tres índices aleatorios únicos
+  const indices = Array.from(
+    { length: 3 },
+    (_, i) => i + Math.floor(Math.random() * postsCopy.length)
+  ).filter((index, _, self) => self.indexOf(index) === index)
+
+  // Filtra los posts basados en los índices aleatorios
+  return indices.map((postIndex) => postsCopy[postIndex])
 })
 </script>
 

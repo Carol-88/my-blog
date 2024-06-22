@@ -41,15 +41,18 @@ const router = createRouter({
   routes
 })
 
-// Guard global para proteger rutas que requieren autenticación
-router.beforeEach(async (to, from, next) => {
+// Función auxiliar para manejar la autenticación
+async function checkAuthentication(to, from, next) {
   const userStore = useUserStore()
   await userStore.fetchUser()
+
   if (to.matched.some((record) => record.meta.requiresAuth) && !userStore.isLoggedIn) {
     next({ name: 'auth' })
   } else {
     next()
   }
-})
+}
 
+// Guard global para proteger rutas que requieren autenticación
+router.beforeEach(checkAuthentication)
 export default router

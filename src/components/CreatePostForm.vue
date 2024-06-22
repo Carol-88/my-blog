@@ -19,10 +19,10 @@
 
 <script setup>
 import { usePostStore } from '../stores/postStore'
-import { toRef } from 'vue'
+import { ref } from 'vue'
 
 const postStore = usePostStore()
-const post = toRef(postStore, 'post')
+const post = ref(postStore.post)
 
 const handleSubmit = async () => {
   try {

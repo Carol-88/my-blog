@@ -1,13 +1,13 @@
 <template>
-  <div class="logout-container">
-    <button @click="handleLogout" aria-label="Cerrar sesión">Cerrar sesión</button>
+  <div class="container">
+    <h2>Cerrar Sesión</h2>
+    <button @click="handleLogout">Cerrar Sesión</button>
   </div>
 </template>
 
 <script setup>
 import { useUserStore } from '../stores/user.js'
 import { useRouter } from 'vue-router'
-import { onMounted } from 'vue'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -15,45 +15,36 @@ const router = useRouter()
 const handleLogout = async () => {
   try {
     await userStore.signOut()
-    alert('Has cerrado sesión.')
-    if (router.currentRoute.value.name !== 'home') {
-      router.push({ name: 'home' })
-    }
+    router.push('/login')
   } catch (error) {
-    console.error('Error al cerrar sesión:', error.message)
-    alert('Error al cerrar sesión. Por favor, inténtalo de nuevo.')
+    alert('Error al cerrar sesión:', error.message)
   }
 }
-
-onMounted(() => {
-  if (!userStore.user) {
-    alert('No estás logueado.')
-    if (router.currentRoute.value.name !== 'home') {
-      router.push({ name: 'home' })
-    }
-  }
-})
 </script>
 
 <style scoped>
-.logout-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+.container {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  margin-top: 5rem;
+}
+
+h2 {
+  text-align: center;
+  color: darkred;
+  margin-bottom: 20px;
 }
 
 button {
-  padding: 12px 24px;
-  background-color: #00366f;
+  width: 100%;
+  padding: 10px;
+  background-color: darkred;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #011c39;
 }
 </style>

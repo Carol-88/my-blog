@@ -1,6 +1,6 @@
-// stores.postStore.js
+import { collection, addDoc, getDocs, doc, getDoc, query, orderBy } from 'firebase/firestore'
+import { db } from '../firebase' // Asegúrate de tener un archivo firebase.js que exporte tu instancia de Firestore
 import { defineStore } from 'pinia'
-import { supabase } from '../supabase'
 
 export const usePostStore = defineStore({
   id: 'post',
@@ -16,18 +16,21 @@ export const usePostStore = defineStore({
       date: ''
     },
     errorMessage: '',
-    isLoading: false // Añadir un estado de carga
+    isLoading: false
   }),
   actions: {
     async fetchPostList() {
       this.isLoading = true
       try {
-        const { data, error } = await supabase.from('posts').select('*')
-        if (error) throw error
-        if (data) {
-          this.posts = data
-          this.errorMessage = ''
-        }
+        const q = query(collection(db, 'posts'), orderBy('date', 'desc'))
+        const querySnapshot = await getDocs(q)
+        this.posts = []
+        querySnapshot.forEach((doc) => {
+          let postData = doc.data()
+          postData.id = doc.id // Agregar el ID del documento a los datos del post
+          this.posts.push(postData)
+        })
+        this.errorMessage = ''
       } catch (error) {
         console.error('Error al obtener la lista de posts:', error.message)
         this.errorMessage =
@@ -60,11 +63,12 @@ export const usePostStore = defineStore({
     async loadPostById(id) {
       this.isLoading = true
       try {
-        const { data: posts, error } = await supabase.from('posts').select('*').eq('id', id)
-        if (error) throw error
-        const post = posts[0]
-        if (post) {
-          this.activePost = post
+        const docRef = doc(db, 'posts', id)
+        const docSnap = await getDoc(docRef)
+        if (docSnap.exists()) {
+          let postData = docSnap.data()
+          postData.id = docSnap.id // Agregar el ID del documento a los datos del post
+          this.activePost = postData
         } else {
           console.log('Post not found')
         }
@@ -78,12 +82,10 @@ export const usePostStore = defineStore({
     async createPost() {
       this.isLoading = true
       try {
-        const { data, error } = await supabase.from('posts').insert([this.post])
-        if (error) throw error
-        if (data) {
-          this.fetchPostList()
-          this.errorMessage = ''
-        }
+        const docRef = await addDoc(collection(db, 'posts'), this.post)
+        console.log('Document written with ID: ', docRef.id)
+        this.fetchPostList() // Actualizar la lista de posts después de crear uno nuevo
+        this.errorMessage = ''
       } catch (error) {
         console.error('Error al crear el post:', error.message)
         this.errorMessage = 'Error al crear el post. Por favor, inténtalo de nuevo más tarde.'

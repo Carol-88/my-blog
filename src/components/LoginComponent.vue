@@ -1,66 +1,100 @@
 <template>
-  <section class="container">
-    <h2>Iniciar sesión</h2>
+  <div class="container">
+    <h2>Iniciar Sesión</h2>
     <form @submit.prevent="handleSubmit">
-      <input v-model="loginEmail" type="email" placeholder="Correo electrónico" required />
-      <input v-model="loginPassword" type="password" placeholder="Contraseña" required />
-      <button type="submit">Iniciar sesión</button>
+      <div class="form-group">
+        <label for="email">Correo electrónico</label>
+        <input
+          v-model="email"
+          type="email"
+          id="email"
+          placeholder="Correo electrónico"
+          :class="{ 'is-invalid': emailError }"
+        />
+        <span v-if="emailError" class="error-message">{{ emailError }}</span>
+      </div>
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input
+          v-model="password"
+          type="password"
+          id="password"
+          placeholder="Contraseña"
+          :class="{ 'is-invalid': passwordError }"
+        />
+        <span v-if="passwordError" class="error-message">{{ passwordError }}</span>
+      </div>
+      <button type="submit">Iniciar Sesión</button>
     </form>
-  </section>
+  </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useUserStore } from '../stores/user.js'
-import { usePostStore } from '../stores/postStore.js'
 import { useRouter } from 'vue-router'
 
 const userStore = useUserStore()
-const postStore = usePostStore()
-const router = useRouter()
-const loginEmail = ref('')
-const loginPassword = ref('')
+const email = ref('')
+const password = ref('')
+
+const emailError = computed(() => {
+  if (!email.value) return 'El correo electrónico es requerido.'
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!emailRegex.test(email.value)) return 'El correo electrónico no es válido.'
+  return null
+})
+
+const passwordError = computed(() => {
+  if (!password.value) return 'La contraseña es requerida.'
+  return null
+})
 
 const handleSubmit = async () => {
-  try {
-    await userStore.signInWithEmail(loginEmail.value, loginPassword.value)
-    if (userStore.user) {
-      await userStore.fetchUser()
-      await postStore.fetchPostList()
-      router.push({ path: '/' })
+  if (!emailError.value && !passwordError.value) {
+    try {
+      await userStore.signInWithEmail(email.value, password.value)
+      const router = useRouter()
+      router.push('/')
+    } catch (error) {
+      alert('Error al iniciar sesión:', error.message)
     }
-  } catch (error) {
-    console.error('Error al iniciar sesión:', error.message)
-    alert('Error al iniciar sesión. Por favor, verifica el correo electrónico y la contraseña.')
   }
 }
 </script>
 
 <style scoped>
-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-h2 {
-  text-align: center;
-  color: darkred;
-  margin-bottom: 20px;
-}
-
-button {
-  width: 200px;
-}
-
 .container {
-  display: flex;
-  flex-direction: column;
   background-color: #ffffff;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 400px;
   margin-top: 5rem;
+}
+
+h2 {
+  text-align: center;
+  color: darkblue;
+  margin-bottom: 20px;
+}
+
+input {
+  width: 90%;
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.is-invalid {
+  border-color: red;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
 }
 </style>

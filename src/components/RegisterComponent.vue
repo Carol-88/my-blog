@@ -71,31 +71,15 @@ const confirmPasswordError = computed(() => {
   return null
 })
 
-const checkIfEmailExists = async () => {
-  try {
-    const exists = await userStore.checkIfEmailExists(email.value)
-    if (exists) {
-      emailError.value = 'El correo electrónico ya está registrado.'
-    } else {
-      emailError.value = null
-    }
-  } catch (error) {
-    console.error('Error al verificar si el correo electrónico existe:', error.message)
-    emailError.value =
-      'Error al verificar si el correo electrónico existe. Por favor, inténtalo de nuevo.'
-  }
-}
-
 const handleSubmit = async () => {
-  await checkIfEmailExists()
-  if (!emailError.value) {
+  if (!emailError.value && !passwordError.value && !confirmPasswordError.value) {
     try {
       await userStore.signUp(email.value, password.value)
-      alert.success('Registro exitoso!, revisa tu correo electrónico para activar tu cuenta.')
+      alert('Registro exitoso Revisa tu correo electrónico para activar tu cuenta.')
       const router = useRouter()
       router.push('/login')
     } catch (error) {
-      alert.error('Error al registrarse:', error.message)
+      alert('Error al registrarse:', error.message)
     }
   }
 }

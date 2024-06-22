@@ -21,11 +21,10 @@
 import { usePostStore } from '../stores/postStore.js'
 import { useRouter } from 'vue-router'
 import { ref, watchEffect } from 'vue'
-import { storeToRefs } from 'pinia'
 
 const postStore = usePostStore()
 const router = useRouter()
-const { activePost } = storeToRefs(postStore)
+const activePost = postStore.activePost
 const isLoading = ref(true)
 
 watchEffect(async () => {

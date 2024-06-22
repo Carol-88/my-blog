@@ -1,22 +1,23 @@
 <template>
-  <div v-if="profile" class="user-card">
-    <img :src="profile.avatar_url" alt="Avatar" class="avatar" />
-    <div class="userinfo">
-      <p class="full-name">{{ profile.full_name }}</p>
-      <em class="username">{{ profile.username }}</em>
+  <div class="user-card">
+    <div v-if="profile" class="userinfo">
+      <img :src="profile.avatar_url" alt="Avatar del usuario" class="avatar" />
+      <div class="userinfo">
+        <p class="full-name">{{ profile.full_name }}</p>
+        <em class="username">{{ profile.username }}</em>
+      </div>
     </div>
-  </div>
-  <div v-else class="user-card empty-profile">
-    <p>No hay perfil disponible</p>
+    <div v-else class="user-card empty-profile">
+      <p>No hay perfil disponible</p>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { useUserStore } from '../stores/user'
-import { storeToRefs } from 'pinia'
 
 const userStore = useUserStore()
-const { profile } = storeToRefs(userStore)
+const profile = userStore.profile
 </script>
 
 <style scoped>
